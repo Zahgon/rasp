@@ -79,95 +79,36 @@ def tokens(x, bos = False):
 
 def indices(x):
   # indices("hello") = [0,1,2,3,4]
-  return torch.arange(len(x)).float()
+  pass
 
 def length(x):
   # length("hello") = [5,5,5,5,5]
-  return torch.ones(len(x)) * len(x)
+  pass
 
 
 # --- element wise
 def logical(x, op, y = None):
   # logical(x, "and", y)
-  def _or(x, y):
-    return torch.logical_or(x.contiguous().view(-1), y.contiguous().view(-1)).view(x.shape)
-  def _and(x, y):
-    return torch.logical_and(x.contiguous().view(-1), y.contiguous().view(-1)).view(x.shape)
-  def _not(x, y):
-    return torch.logical_not(x.contiguous().view(-1)).view(x.shape)
-  def _xor(x, y):
-    return torch.logical_xor(x.contiguous().view(-1), y.contiguous().view(-1)).view(x.shape)
-  
-  assert op in ["or", "and", "not", "xor"], f"`{op}` not supported"
-  if op != "not":
-    assert x.shape == y.shape, f"Shapes must be same, got {x.shape}, {y.shape}"
-  out = {"or": _or, "and": _and, "not": _not, "xor": _xor}[op](x, y)
-  return out
+  pass
 
 def elementwise(x, op, y):
   # elementwise(x, "-", y)
-  if op in ["or", "and", "not", "xor"]:
-    return logical(x, op, y)
-
-  def _add(x, y): return x + y
-  def _mul(x, y): return x * y
-  def _sub(x, y): return x - y
-  def _div(x, y):
-    out = torch.div(x, y)
-    out[out == float("inf")] = 0
-    out = torch.nan_to_num(out, 0)
-    return out
-
-  assert x.shape == y.shape, f"Shapes must be same, got {x.shape}, {y.shape}"
-  assert op in ["+", "-", "*", "/"], f"`{op}` not supported"
-
-  out = {"+":_add, "-":_sub, "*":_mul, "/":_div}[op](x, y)
-  return out
+  pass
 
 
 # --- select
 def select(m1: torch.Tensor, m2, op):
   # creating boolean matrices called "selectors"
-  if isinstance(m2, (bool, int)):
-    m2 = torch.ones(m1.shape) * m2
-  
-  assert len(m1.shape) == 1
-  assert len(m2.shape) == 1
-  
-  rows = ein.repeat(m1, "w -> n w", n = m2.shape[0])
-  cols = ein.repeat(m2, "h -> h n", n = m1.shape[0])
-
-  init_shape = rows.shape
-  out = {
-    "==": torch.eq,
-    "!=": lambda *x: ~torch.eq(*x),
-    "<=": torch.less_equal,
-    "<": torch.less,
-    ">": torch.greater,
-    ">=": torch.greater_equal,
-  }[op](rows.contiguous().view(-1), cols.contiguous().view(-1))
-  out = out.view(*init_shape)
-
-  return out
+  pass
   
 # --- aggregate
 def aggregate(s, x, agg = "mean"):
   # collapsing selectors and s-ops into new s-ops
-  x = ein.repeat(x, "w -> n w", n = s.shape[0])
-  sf = s.float()
-  y = x * sf
-  
-  if agg == "mean":
-    ym = y.sum(1) / sf.sum(1)
-  else:
-    raise ValueError(f"agg: `{agg}` not found")
-  
-  return torch.nan_to_num(ym, 0)
+  pass
 
 # --- simple select aggregate
 def flip(x):
-  i = indices(x); l = length(x)
-  return select(i, l-i-1, "==")
+  pass
 
 # --- selector_width
 

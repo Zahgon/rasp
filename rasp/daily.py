@@ -17,38 +17,17 @@ except ImportError as e:
 import logging
 logging.basicConfig(level="INFO")
 def log(x: str, *args):
-  x = str(x)
-  for y in args:
-    x += " " + str(y)
-  logging.info(x)
+  pass
 
 
 def fetch(url):
   # efficient loading of URLS
-  import os, tempfile, hashlib, requests
-  fp = os.path.join(tempfile.gettempdir(), hashlib.md5(url.encode('utf-8')).hexdigest())
-  if os.path.isfile(fp) and os.stat(fp).st_size > 0:
-    with open(fp, "rb") as f:
-        dat = f.read()
-  else:
-    print("fetching", url)
-    dat = requests.get(url).content
-    with open(fp+".tmp", "wb") as f:
-      f.write(dat)
-    os.rename(fp+".tmp", fp)
-  return dat
+  pass
 
 
 def get_files_in_folder(folder, ext = [".txt"]):
   # this method is faster than glob
-  import os
-  all_paths = []
-  for root,_,files in os.walk(folder):
-    for f in files:
-      for e in ext:
-        if f.endswith(e):
-          all_paths.append(os.path.join(root,f))
-  return all_paths
+  pass
 
 
 def json_load(path):
@@ -56,12 +35,7 @@ def json_load(path):
   # json files should have description strings so it's more friendly
   # but it won't load with json.load(f) so read the file, remove the
   # comments and json.loads(text)
-  import json, re
-  with open(path, 'r') as f:
-    text = f.read()
-  text = re.sub(r"\s*(\/{2}.*)\n", "\n", text)
-  config = json.loads(text)
-  return config
+  pass
 
 
 def folder(x):
@@ -76,9 +50,7 @@ class Hashlib:
   # import hashlib
   
   def sha256(x):
-    import hashlib
-    x = x if isinstance(x, bytes) else x.encode("utf-8")
-    return hashlib.sha256(x).hexdigest()
+    pass
   
   def md5(x):
     import hashlib
